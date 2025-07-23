@@ -1,3 +1,5 @@
+import math
+
 import torch
 
 class RNN:
@@ -72,16 +74,32 @@ class RNN:
         for l in range(1, self.k):
             self.dL_dWx[l] = dL_dz[l].t()@self.H[l-1]
         
-    def fit(self, X:torch.Tensor, Y_hat: torch.Tensor, alpha:float = 0.1, epochs:int = 10, verbose:bool = False):
+    def fit(
+            self, 
+            X:torch.Tensor, 
+            Y_hat: torch.Tensor, 
+            alpha:float = 0.1, 
+            epochs:int = 10, 
+            verbose:bool = False, 
+            decay:str = "const", 
+            decay_rate:float = 0.9
+        ):
         for ep in range(epochs):
+            if decay == "exp":
+                a = alpha*math.exp(-decay_rate*ep/epochs)
+            elif decay == "inv":
+                a = alpha/(1+decay_rate*ep/epochs)
+            else:
+                a = alpha
+            
             Y = self._forward_pass(X)
             self._backward_pass(X, Y, Y_hat)
 
             for l in range(self.k):
-                self.W_x[l] -= alpha*self.dL_dWx[l]
-                self.W_h[l] -= alpha*self.dL_dWh[l]
+                self.W_x[l] -= a*self.dL_dWx[l]
+                self.W_h[l] -= a*self.dL_dWh[l]
             
-            self.W_y -= alpha*self.dL_dWy
+            self.W_y -= a*self.dL_dWy
 
             loss = torch.mean((Y - Y_hat) ** 2).item()
             if verbose:
