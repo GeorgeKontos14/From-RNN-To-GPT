@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from long_short_term_memory import LSTM
 from recurrent_neural_net import RNN
 from bidirectional_neural_net import BiNN
+from gated_recurrent_unit import GRU
 
 # --- 1. Generate SINGLE (T,d) and (T,q) sequence ---
 def generate_sequence(T=50, d=3, q=1):
@@ -31,7 +32,7 @@ print(f"X_train: {X_train.shape} (should be (T,d))")
 print(f"Y_train: {Y_train.shape} (should be (T,q))")
 
 # --- 2. Initialize LSTM ---
-neural_net = LSTM(d=3, p=32, k=2, q=1)  # Matches input/output dims
+neural_net = GRU(d=3, p=32, k=2, q=1)  # Matches input/output dims
 
 # --- 3. Train on SINGLE sequence ---
 neural_net.fit(X_train, Y_train, 

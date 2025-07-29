@@ -120,7 +120,7 @@ class LSTM:
                 self.dL_dWh_c[l] += e_c.view(-1,1)@h_prev
 
                 if l >= 1:
-                    dL_dh[l-1] = e_i@self.W_x_i[l]+e_f@self.W_x_f[l]+e_o@self.W_x_o[l]+e_c@self.W_x_c[l]
+                    dL_dh[l-1][t] = e_i@self.W_x_i[l]+e_f@self.W_x_f[l]+e_o@self.W_x_o[l]+e_c@self.W_x_c[l]
                 
                     h_prev_l = self.H[l-1][t].view(1,-1)
                 else:
