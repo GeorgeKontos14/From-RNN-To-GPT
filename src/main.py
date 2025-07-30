@@ -1,10 +1,7 @@
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from long_short_term_memory import LSTM
-from recurrent_neural_net import RNN
-from bidirectional_neural_net import BiNN
-from gated_recurrent_unit import GRU
+from recurrent_networks import GRU
 
 # --- 1. Generate SINGLE (T,d) and (T,q) sequence ---
 def generate_sequence(T=50, d=3, q=1):
