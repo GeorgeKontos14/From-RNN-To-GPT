@@ -30,6 +30,7 @@ class BaseRNN(ABC):
         decay: str = "const",
         decay_rate: float = 0.9
     ):
+        history = []
         for ep in range(epochs):
             if decay == "exp":
                 a = alpha * math.exp(-decay_rate * ep / epochs)
@@ -45,6 +46,9 @@ class BaseRNN(ABC):
             loss = torch.mean((Y - Y_hat) ** 2).item()
             if verbose:
                 print(f"Epoch {ep+1}/{epochs}, Loss: {loss:.6f}")
+            history.append(loss)
+        
+        return history
 
     @abstractmethod
     def _apply_gradients(self, lr: float):
